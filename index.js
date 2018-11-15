@@ -6,6 +6,8 @@ const { as } = require('@cuties/cutie');
 const { CreatedInterface, AnswersOfQuestionedInterface, ClosedInterface } = require('@cuties/readline');
 const { ExitedProcess } = require('@cuties/process');
 const { Value } = require('@cuties/json');
+const { DeletedDirectoryRecursively } = require('@cuties/fs');
+const { JoinedPaths } = require('@cuties/path');
 const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
 const OverriddenRepo = require('./OverriddenRepo');
@@ -38,7 +40,14 @@ if (process.argv[2] === 'create') {
           'https://github.com/Guseyn/page.git',
           new Value(as('projectDetails'), 'projectName')
         ).after(
-          new ExitedProcess(process, 0)
+          new DeletedDirectoryRecursively(
+            new JoinedPaths(
+              new Value(as('projectDetails'), 'projectName'),
+              '.git'
+            )
+          ).after(
+            new ExitedProcess(process, 0)
+          )
         )
       )
     )
