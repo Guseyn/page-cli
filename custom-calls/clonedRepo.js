@@ -4,8 +4,8 @@
 
 const spawn = require('child_process').spawn;
 
-module.exports = (url, callback) => {
-  const git = spawn('git', ['clone', url], {
+module.exports = (url, name, callback) => {
+  const git = spawn('git', ['clone', url, name], {
     stdio: [process.stdin, process.stdout, process.stderr]
   });
   git.on('close', (code) => {

@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Guseyn/page-cli#readme",
   "dependencies": {
     "@cuties/cutie": "^1.4.4",
+    "@cuties/json": "^1.0.0",
     "@cuties/process": "^1.1.0",
     "@cuties/readline": "^1.0.0"
   }

@@ -5,14 +5,18 @@
 const { as } = require('@cuties/cutie');
 const { CreatedInterface, AnswersOfQuestionedInterface, ClosedInterface } = require('@cuties/readline');
 const { ExitedProcess } = require('@cuties/process');
+const { Value } = require('@cuties/json');
+const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
+const OverriddenRepo = require('./OverriddenRepo');
 
 if (process.argv[2] === 'create') {
-  new ClonedRepo('https://github.com/Guseyn/page.git').after(
-    new CreatedInterface({
-      input: process.stdin,
-      output: process.stdout
-    }).as('interface').after(
+  new CreatedInterface({
+    input: process.stdin,
+    output: process.stdout
+  }).as('interface').after(
+    new ProjectDetails(
+      ['projectName', 'version', 'author', 'description', 'license'],
       new AnswersOfQuestionedInterface(
         as('interface'), 'License: (MIT) ',
         new AnswersOfQuestionedInterface(
@@ -26,9 +30,14 @@ if (process.argv[2] === 'create') {
               )
             )
           )
-        ) 
-      ).after(
-        new ClosedInterface(as('interface')).after(
+        )
+      )
+    ).as('projectDetails').after(
+      new ClosedInterface(as('interface')).after(
+        new ClonedRepo(
+          'https://github.com/Guseyn/page.git',
+          new Value(as('projectDetails'), 'projectName')
+        ).after(
           new ExitedProcess(process, 0)
         )
       )
