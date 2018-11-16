@@ -13,6 +13,7 @@ const ClonedRepo = require('./ClonedRepo');
 const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
 const ReadmeContent = require('./ReadmeContent');
 const BuildingProcess = require('./BuildingProcess');
+const RunningProcess = require('./RunningProcess');
 
 let command = process.argv[2];
 if (command === 'create') {
@@ -89,12 +90,13 @@ if (command === 'create') {
     )
   ).call();
 } else if (command === 'update') {
-
+  
 } else if (command === 'build') {
   let env = process.argv[3] || 'local';
   new BuildingProcess(env).call();
 } else if (command === 'run') {
-
+  let env = process.argv[3] || 'local';
+  new RunningProcess(env).call();
 } else {
-  throw new Error(`no command like ${command}`);
+  throw new Error(`no such command like ${command}`);
 }
