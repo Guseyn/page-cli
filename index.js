@@ -11,6 +11,7 @@ const { JoinedPaths } = require('@cuties/path');
 const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
 const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
+const ReadmeContent = require('./ReadmeContent');
 
 if (process.argv[2] === 'create') {
   new CreatedInterface({
@@ -66,7 +67,18 @@ if (process.argv[2] === 'create') {
                   )
                 )
               ).after(
-                new ExitedProcess(process, 0)
+                new WrittenFile(
+                  new JoinedPaths(
+                    new Value(as('projectDetails'), 'name'),
+                    'README.md'
+                  ),
+                  new ReadmeContent(
+                    new Value(as('projectDetails'), 'name'),
+                    new Value(as('projectDetails'), 'description')
+                  )
+                ).after(
+                  new ExitedProcess(process, 0)
+                )
               )
             )
           )
