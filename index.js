@@ -5,12 +5,12 @@
 const { as } = require('@cuties/cutie');
 const { CreatedInterface, AnswersOfQuestionedInterface, ClosedInterface } = require('@cuties/readline');
 const { ExitedProcess } = require('@cuties/process');
-const { Value } = require('@cuties/json');
-const { DeletedDirectoryRecursively } = require('@cuties/fs');
+const { Value, ParsedJSON, PrettyStringifiedJSON } = require('@cuties/json');
+const { DeletedDirectoryRecursively, ReadDataByPath, WrittenFile } = require('@cuties/fs');
 const { JoinedPaths } = require('@cuties/path');
 const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
-const OverriddenRepo = require('./OverriddenRepo');
+const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
 
 if (process.argv[2] === 'create') {
   new CreatedInterface({
@@ -18,7 +18,9 @@ if (process.argv[2] === 'create') {
     output: process.stdout
   }).as('interface').after(
     new ProjectDetails(
-      ['projectName', 'version', 'author', 'description', 'license'],
+      [{value: 'name'}, {value: 'version', default: '1.0.0'},
+       {value: 'author'}, {value: 'description'}, 
+       {value: 'license', default: 'MIT'}],
       new AnswersOfQuestionedInterface(
         as('interface'), 'License: (MIT) ',
         new AnswersOfQuestionedInterface(
@@ -38,15 +40,35 @@ if (process.argv[2] === 'create') {
       new ClosedInterface(as('interface')).after(
         new ClonedRepo(
           'https://github.com/Guseyn/page.git',
-          new Value(as('projectDetails'), 'projectName')
+          new Value(as('projectDetails'), 'name')
         ).after(
           new DeletedDirectoryRecursively(
             new JoinedPaths(
-              new Value(as('projectDetails'), 'projectName'),
+              new Value(as('projectDetails'), 'name'),
               '.git'
             )
           ).after(
-            new ExitedProcess(process, 0)
+            new JoinedPaths(
+              new Value(as('projectDetails'), 'name'),
+              'package.json'
+            ).as('packageJsonPath').after(
+              new WrittenFile(
+                as('packageJsonPath'),
+                new PrettyStringifiedJSON(
+                  new ChangedPackageJsonFile(
+                    new ParsedJSON(
+                      new ReadDataByPath(
+                        as('packageJsonPath'), {encoding: 'utf8'}
+                      )
+                    ), 
+                    as('projectDetails'), 
+                    ['repository', 'bugs', 'homepage']
+                  )
+                )
+              ).after(
+                new ExitedProcess(process, 0)
+              )
+            )
           )
         )
       )

@@ -28,7 +28,7 @@
   "dependencies": {
     "@cuties/cutie": "^1.4.4",
     "@cuties/fs": "^1.1.5",
-    "@cuties/json": "^1.0.0",
+    "@cuties/json": "^1.0.1",
     "@cuties/path": "^1.0.3",
     "@cuties/process": "^1.1.0",
     "@cuties/readline": "^1.0.0"
