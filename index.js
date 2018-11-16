@@ -12,8 +12,10 @@ const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
 const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
 const ReadmeContent = require('./ReadmeContent');
+const BuildingProcess = require('./BuildingProcess');
 
-if (process.argv[2] === 'create') {
+let command = process.argv[2];
+if (command === 'create') {
   new CreatedInterface({
     input: process.stdin,
     output: process.stdout
@@ -86,4 +88,13 @@ if (process.argv[2] === 'create') {
       )
     )
   ).call();
+} else if (command === 'update') {
+
+} else if (command === 'build') {
+  let env = process.argv[3] || 'local';
+  new BuildingProcess(env).call();
+} else if (command === 'run') {
+
+} else {
+  throw new Error(`no command like ${command}`);
 }
