@@ -128,6 +128,22 @@ switch (command) {
     ).call();
     break;
   }
+  case '-h':
+  case '--help': {
+    console.log(
+`commands:
+  page create: creates a new project
+  page update: upgrades the project to a new version
+  page build | page b: builds the project
+  page run | page r: runs the project
+  page br: builds and then runs the project
+  page -v | page --version: check a version of the project
+`
+    );
+    break;
+  }
   default:
-    throw new Error(`no such command like ${command}`);
+    throw new Error(`
+      no such command like ${command}, use page --help | page -h for more info
+    `);
 }
