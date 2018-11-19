@@ -8,6 +8,7 @@ const { ExitedProcess } = require('@cuties/process');
 const { Value, ParsedJSON, PrettyStringifiedJSON } = require('@cuties/json');
 const { DeletedDirectoryRecursively, ReadDataByPath, WrittenFile } = require('@cuties/fs');
 const { JoinedPaths } = require('@cuties/path');
+const { ResponseFromHttpsGetRequest, ResponseBody } = require('@cuties/https');
 const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
 const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
@@ -94,6 +95,15 @@ switch (command) {
     break;
   }
   case 'update': {
+    new WrittenFile(
+      '.patchFiles',
+      new ResponseBody(
+        new ResponseFromHttpsGetRequest({
+            hostname: 'raw.githubusercontent.com',
+            path: '/Guseyn/page/master/.patchFiles'
+        })
+      )
+    ).call();
     break;
   }
   case 'build':
@@ -133,7 +143,7 @@ switch (command) {
     console.log(
 `commands:
   page create: creates a new project
-  page update: upgrades the project to a new version
+  page update: upgrades the project to a new version of Page framework
   page build | page b: builds the project
   page run | page r: runs the project
   page br: builds and then runs the project
