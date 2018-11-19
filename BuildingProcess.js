@@ -3,11 +3,11 @@
 const { AsyncObject } = require('@cuties/cutie');
 const buildingProcess = require('./custom-calls/buildingProcess');
 
-// Represented result is true
+// Represented result is process
 class BuildingProcess extends AsyncObject {
 
-  constructor(env) {
-    super(env);
+  constructor(process, env) {
+    super(process, env);
   }
 
   definedAsyncCall() {
