@@ -8,7 +8,7 @@ module.exports = (url, name, callback) => {
   });
   git.on('close', (code) => {
     if (code === 0) {
-      callback(null, code);
+      callback(null, name);
     } else {
       callback(new Error(`error with code: ${code}`));
     }
