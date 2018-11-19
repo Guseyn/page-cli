@@ -97,6 +97,11 @@ if (command === 'create') {
 } else if (command === 'run' || command === 'r') {
   let env = process.argv[3] || 'local';
   new RunningProcess(process, env).call();
+} else if (command === 'br') {
+  let env = process.argv[3] || 'local';
+  new RunningProcess(
+    new BuildingProcess(process, env), env
+  ).call();
 } else {
   throw new Error(`no such command like ${command}`);
 }
