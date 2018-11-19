@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/Guseyn/page-cli#readme",
   "dependencies": {
+    "@cuties/buffer": "^1.1.1",
     "@cuties/cutie": "^1.4.4",
     "@cuties/fs": "^1.1.5",
     "@cuties/https": "^1.0.2",

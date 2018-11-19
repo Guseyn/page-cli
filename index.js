@@ -9,6 +9,7 @@ const { Value, ParsedJSON, PrettyStringifiedJSON } = require('@cuties/json');
 const { DeletedDirectoryRecursively, ReadDataByPath, WrittenFile } = require('@cuties/fs');
 const { JoinedPaths } = require('@cuties/path');
 const { ResponseFromHttpsGetRequest, ResponseBody } = require('@cuties/https');
+const { StringFromBuffer } = require('@cuties/buffer');
 const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
 const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
@@ -16,6 +17,7 @@ const ReadmeContent = require('./ReadmeContent');
 const BuildingProcess = require('./BuildingProcess');
 const RunningProcess = require('./RunningProcess');
 const LoggedPageVersion = require('./LoggedPageVersion');
+const PatchFiles = require('./PatchFiles');
 
 let command = process.argv[2];
 switch (command) {
@@ -102,6 +104,12 @@ switch (command) {
             hostname: 'raw.githubusercontent.com',
             path: '/Guseyn/page/master/.patchFiles'
         })
+      ).as('patchFilesContentAsBuffer')
+    ).after(
+      new PatchFiles(
+        new StringFromBuffer(
+          as('patchFilesContentAsBuffer')
+        )
       )
     ).call();
     break;
