@@ -15,7 +15,7 @@ class ProjectDetails extends AsyncObject {
         throw new Error('keys and answers have different lengths');
       }
       keys.forEach((key, index) => {
-        details[key.value] = answers[index] || (key.default || '');
+        details[key.name] = answers[index] || (key.defaultValue || '');
       });
       return details;
     }

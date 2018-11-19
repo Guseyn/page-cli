@@ -22,9 +22,9 @@ if (command === 'create') {
     output: process.stdout
   }).as('interface').after(
     new ProjectDetails(
-      [{value: 'name'}, {value: 'version', default: '1.0.0'},
-       {value: 'author'}, {value: 'description'}, 
-       {value: 'license', default: 'MIT'}],
+      [{name: 'name'}, {name: 'version', defaultValue: '1.0.0'},
+       {name: 'author'}, {name: 'description'}, 
+       {name: 'license', defaultValue: 'MIT'}],
       new AnswersOfQuestionedInterface(
         as('interface'), 'License: (MIT) ',
         new AnswersOfQuestionedInterface(
@@ -91,10 +91,10 @@ if (command === 'create') {
   ).call();
 } else if (command === 'update') {
   
-} else if (command === 'build') {
+} else if (command === 'build' || command === 'b') {
   let env = process.argv[3] || 'local';
   new BuildingProcess(env).call();
-} else if (command === 'run') {
+} else if (command === 'run' command === 'r') {
   let env = process.argv[3] || 'local';
   new RunningProcess(env).call();
 } else {
