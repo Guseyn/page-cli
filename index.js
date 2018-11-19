@@ -2,7 +2,8 @@
 
 'use strict'
 
-const { as } = require('@cuties/cutie');
+const { as, AsyncObject } = require('@cuties/cutie');
+const { If, Else } = require('@cuties/if-else');
 const { CreatedInterface, AnswersOfQuestionedInterface, ClosedInterface } = require('@cuties/readline');
 const { ExitedProcess } = require('@cuties/process');
 const { Value, ParsedJSON, PrettyStringifiedJSON } = require('@cuties/json');
@@ -18,6 +19,10 @@ const ReadmeContent = require('./ReadmeContent');
 const BuildingProcess = require('./BuildingProcess');
 const RunningProcess = require('./RunningProcess');
 const LoggedPageVersion = require('./LoggedPageVersion');
+const ConfigWithUpdatedPageVersion = require('./ConfigWithUpdatedPageVersion');
+const AreVersionsEqual = require('./AreVersionsEqual');
+const UpdatedSuccessfullyMessage = require('./UpdatedSuccessfullyMessage');
+const LatestVersionMessage = require('./LatestVersionMessage')
 
 let command = process.argv[2];
 switch (command) {
@@ -97,7 +102,67 @@ switch (command) {
     break;
   }
   case 'update': {
-
+    new If(
+      new AreVersionsEqual(
+        new Value(
+          new ParsedJSON(
+            new StringFromBuffer(
+              new ResponseBody(
+                new ResponseFromHttpsGetRequest({
+                  hostname: 'raw.githubusercontent.com',
+                  path: '/Guseyn/page/master/config.json'
+                })
+              )
+            )
+          ).as('githubConfig'),
+          'page.version'
+        ),
+        new Value(
+          new ParsedJSON(
+            new ReadDataByPath(
+              'config.json', { encoding: 'utf8' }
+            )
+          ).as('localConfig'),
+          'page.version'
+        )
+      ), 
+      new LatestVersionMessage(
+        new Value(as('localConfig'), 'page.version')
+      ),
+      new Else(
+        new ClonedRepo(
+          'https://github.com/Guseyn/page.git',
+          'tmpRepo'
+        ).as('tmpRepo').after(
+          new WrittenFile(
+            'config.json',
+            new PrettyStringifiedJSON(
+              new ConfigWithUpdatedPageVersion(
+                as('localConfig'),
+                new Value(
+                  as('githubConfig'), 'page.version'
+                )
+              ).as('updatedLocalConfig')
+            )
+          ).after(
+            new DeletedDirectoryRecursively(
+              new Value(as('updatedLocalConfig'), 'staticJs')
+            ).after(
+              new CopiedDirectoryRecursively(
+                new JoinedPaths(
+                  as('tmpRepo'), new Value(as('updatedLocalConfig'), 'staticJs')
+                ),
+                new Value(as('updatedLocalConfig'), 'staticJs')
+              ).after(
+                new DeletedDirectoryRecursively(as('tmpRepo')).after(
+                  new UpdatedSuccessfullyMessage(new Value(as('updatedLocalConfig'), 'page.version'))
+                )
+              )
+            )
+          )
+        )
+      )
+    ).call();
     break;
   }
   case 'build':
