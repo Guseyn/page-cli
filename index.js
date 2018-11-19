@@ -14,94 +14,120 @@ const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
 const ReadmeContent = require('./ReadmeContent');
 const BuildingProcess = require('./BuildingProcess');
 const RunningProcess = require('./RunningProcess');
+const LoggedPageVersion = require('./LoggedPageVersion');
 
 let command = process.argv[2];
-if (command === 'create') {
-  new CreatedInterface({
-    input: process.stdin,
-    output: process.stdout
-  }).as('interface').after(
-    new ProjectDetails(
-      [{name: 'name'}, {name: 'version', defaultValue: '1.0.0'},
-       {name: 'author'}, {name: 'description'}, 
-       {name: 'license', defaultValue: 'MIT'}],
-      new AnswersOfQuestionedInterface(
-        as('interface'), 'License: (MIT) ',
+switch (command) {
+  case 'create': {
+    new CreatedInterface({
+      input: process.stdin,
+      output: process.stdout
+    }).as('interface').after(
+      new ProjectDetails(
+        [{name: 'name'}, {name: 'version', defaultValue: '1.0.0'},
+         {name: 'author'}, {name: 'description'}, 
+         {name: 'license', defaultValue: 'MIT'}],
         new AnswersOfQuestionedInterface(
-          as('interface'), 'Description: ',
+          as('interface'), 'License: (MIT) ',
           new AnswersOfQuestionedInterface(
-            as('interface'), 'Author: ',
+            as('interface'), 'Description: ',
             new AnswersOfQuestionedInterface(
-              as('interface'), 'Version: (1.0.0) ',
+              as('interface'), 'Author: ',
               new AnswersOfQuestionedInterface(
-                as('interface'), 'Project name: '
+                as('interface'), 'Version: (1.0.0) ',
+                new AnswersOfQuestionedInterface(
+                  as('interface'), 'Project name: '
+                )
               )
             )
           )
         )
-      )
-    ).as('projectDetails').after(
-      new ClosedInterface(as('interface')).after(
-        new ClonedRepo(
-          'https://github.com/Guseyn/page.git',
-          new Value(as('projectDetails'), 'name')
-        ).after(
-          new DeletedDirectoryRecursively(
-            new JoinedPaths(
-              new Value(as('projectDetails'), 'name'),
-              '.git'
-            )
+      ).as('projectDetails').after(
+        new ClosedInterface(as('interface')).after(
+          new ClonedRepo(
+            'https://github.com/Guseyn/page.git',
+            new Value(as('projectDetails'), 'name')
           ).after(
-            new JoinedPaths(
-              new Value(as('projectDetails'), 'name'),
-              'package.json'
-            ).as('packageJsonPath').after(
-              new WrittenFile(
-                as('packageJsonPath'),
-                new PrettyStringifiedJSON(
-                  new ChangedPackageJsonFile(
-                    new ParsedJSON(
-                      new ReadDataByPath(
-                        as('packageJsonPath'), {encoding: 'utf8'}
-                      )
-                    ), 
-                    as('projectDetails'), 
-                    ['repository', 'bugs', 'homepage']
-                  )
-                )
-              ).after(
+            new DeletedDirectoryRecursively(
+              new JoinedPaths(
+                new Value(as('projectDetails'), 'name'),
+                '.git'
+              )
+            ).after(
+              new JoinedPaths(
+                new Value(as('projectDetails'), 'name'),
+                'package.json'
+              ).as('packageJsonPath').after(
                 new WrittenFile(
-                  new JoinedPaths(
-                    new Value(as('projectDetails'), 'name'),
-                    'README.md'
-                  ),
-                  new ReadmeContent(
-                    new Value(as('projectDetails'), 'name'),
-                    new Value(as('projectDetails'), 'description')
+                  as('packageJsonPath'),
+                  new PrettyStringifiedJSON(
+                    new ChangedPackageJsonFile(
+                      new ParsedJSON(
+                        new ReadDataByPath(
+                          as('packageJsonPath'), {encoding: 'utf8'}
+                        )
+                      ), 
+                      as('projectDetails'), 
+                      ['repository', 'bugs', 'homepage']
+                    )
                   )
                 ).after(
-                  new ExitedProcess(process, 0)
+                  new WrittenFile(
+                    new JoinedPaths(
+                      new Value(as('projectDetails'), 'name'),
+                      'README.md'
+                    ),
+                    new ReadmeContent(
+                      new Value(as('projectDetails'), 'name'),
+                      new Value(as('projectDetails'), 'description')
+                    )
+                  ).after(
+                    new ExitedProcess(process, 0)
+                  )
                 )
               )
             )
           )
         )
       )
-    )
-  ).call();
-} else if (command === 'update') {
-  
-} else if (command === 'build' || command === 'b') {
-  let env = process.argv[3] || 'local';
-  new BuildingProcess(process, env).call();
-} else if (command === 'run' || command === 'r') {
-  let env = process.argv[3] || 'local';
-  new RunningProcess(process, env).call();
-} else if (command === 'br') {
-  let env = process.argv[3] || 'local';
-  new RunningProcess(
-    new BuildingProcess(process, env), env
-  ).call();
-} else {
-  throw new Error(`no such command like ${command}`);
+    ).call();
+    break;
+  }
+  case 'update': {
+    break;
+  }
+  case 'build':
+  case 'b': {
+    let env = process.argv[3] || 'local';
+    new BuildingProcess(process, env).call();
+    break;
+  }
+  case 'run':
+  case 'r': {
+    let env = process.argv[3] || 'local';
+    new RunningProcess(process, env).call();
+    break;
+  }
+  case 'br': {
+    let env = process.argv[3] || 'local';
+    new RunningProcess(
+      new BuildingProcess(process, env), env
+    ).call();
+    break;
+  }
+  case '-v':
+  case '--version': {
+    new LoggedPageVersion(
+      new Value(
+        new ParsedJSON(
+          new ReadDataByPath(
+            'config.json', { encoding: 'utf8' }
+          )
+        ), 'page.version'
+      )
+    ).call();
+    break;
+  }
+  default:
+    throw new Error(`no such command like ${command}`);
 }
