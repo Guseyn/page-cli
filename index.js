@@ -93,10 +93,10 @@ if (command === 'create') {
   
 } else if (command === 'build' || command === 'b') {
   let env = process.argv[3] || 'local';
-  new BuildingProcess(env).call();
-} else if (command === 'run' command === 'r') {
+  new BuildingProcess(process, env).call();
+} else if (command === 'run' || command === 'r') {
   let env = process.argv[3] || 'local';
-  new RunningProcess(env).call();
+  new RunningProcess(process, env).call();
 } else {
   throw new Error(`no such command like ${command}`);
 }
