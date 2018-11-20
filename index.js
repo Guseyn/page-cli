@@ -203,9 +203,9 @@ switch (command) {
 `commands:
   page create: creates a new project
   page update: upgrades the project to a new version of Page framework
-  page build | page b: builds the project
-  page run | page r: runs the project
-  page br: builds and then runs the project
+  page build [evironment] | page b [evironment]: builds the project
+  page run [evironment] | page r [evironment]: runs the project
+  page br [evironment]: builds and then runs the project
   page -v | page --version: check a version of the Page framework
 `
     );
