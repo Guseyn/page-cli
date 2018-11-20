@@ -206,7 +206,7 @@ switch (command) {
   page build | page b: builds the project
   page run | page r: runs the project
   page br: builds and then runs the project
-  page -v | page --version: check a version of the project
+  page -v | page --version: check a version of the Page framework
 `
     );
     break;
