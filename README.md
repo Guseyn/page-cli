@@ -9,5 +9,6 @@ Command line interface for [Page](https://github.com/Guseyn/page) framework.
 * `page run [evironment] | page r [evironment]`: runs the project
 * `page br [evironment]`: builds and then runs the project
 * `page -v | page --version`: check a version of the Page framework
+* `page -h | page --help`: information about commands
 
 By default `environment` is `local`. For more information visit Page [docs](https://github.com/Guseyn/page).

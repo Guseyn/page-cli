@@ -2,7 +2,7 @@
 
 const { AsyncObject } = require('@cuties/cutie');
 
-class LatestVersionMessage extends AsyncObject {
+class WarningLatestVersionMessage extends AsyncObject {
 
   constructor(version) {
     super(version);
@@ -18,4 +18,4 @@ class LatestVersionMessage extends AsyncObject {
 
 }
 
-module.exports = LatestVersionMessage;
+module.exports = WarningLatestVersionMessage;

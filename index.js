@@ -14,6 +14,7 @@ const { StringFromBuffer } = require('@cuties/buffer');
 const ProjectDetails = require('./ProjectDetails');
 const ClonedRepo = require('./ClonedRepo');
 const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
+const PackageJsonFileWithUpdatedDeps = require('./PackageJsonFileWithUpdatedDeps');
 const ReadmeContent = require('./ReadmeContent');
 const BuildingProcess = require('./BuildingProcess');
 const RunningProcess = require('./RunningProcess');
@@ -21,7 +22,7 @@ const LoggedPageVersion = require('./LoggedPageVersion');
 const ConfigWithUpdatedPageVersion = require('./ConfigWithUpdatedPageVersion');
 const AreVersionsEqual = require('./AreVersionsEqual');
 const UpdatedSuccessfullyMessage = require('./UpdatedSuccessfullyMessage');
-const LatestVersionMessage = require('./LatestVersionMessage')
+const WarningWithLatestVersionMessage = require('./WarningWithLatestVersionMessage')
 
 let command = process.argv[2];
 switch (command) {
@@ -125,36 +126,41 @@ switch (command) {
           'page.version'
         )
       ), 
-      new LatestVersionMessage(
+      new WarningWithLatestVersionMessage(
         new Value(as('localConfig'), 'page.version')
       ),
       new Else(
-        new ClonedRepo(
-          'https://github.com/Guseyn/page.git',
-          'tmpRepo'
-        ).as('tmpRepo').after(
+        new WrittenFile(
+          'config.json',
+          new PrettyStringifiedJSON(
+            new ConfigWithUpdatedPageVersion(
+              as('localConfig'),
+              new Value(
+                as('githubConfig'), 'page.version'
+              )
+            ).as('updatedLocalConfig')
+          )
+        ).after(
           new WrittenFile(
-            'config.json',
+            'package.json',
             new PrettyStringifiedJSON(
-              new ConfigWithUpdatedPageVersion(
-                as('localConfig'),
-                new Value(
-                  as('githubConfig'), 'page.version'
-                )
-              ).as('updatedLocalConfig')
-            )
-          ).after(
-            new DeletedDirectoryRecursively(
-              new Value(as('updatedLocalConfig'), 'staticJs')
-            ).after(
-              new CopiedDirectoryRecursively(
-                new JoinedPaths(
-                  as('tmpRepo'), new Value(as('updatedLocalConfig'), 'staticJs')
+              new PackageJsonFileWithUpdatedDeps(
+                new ParsedJSON(
+                  new ReadDataByPath(
+                    'package.json', {encoding: 'utf8'}
+                  )
                 ),
-                new Value(as('updatedLocalConfig'), 'staticJs')
-              ).after(
-                new DeletedDirectoryRecursively(as('tmpRepo')).after(
-                  new UpdatedSuccessfullyMessage(new Value(as('updatedLocalConfig'), 'page.version'))
+                new Value(
+                  new ParsedJSON(
+                    new StringFromBuffer(
+                      new ResponseBody(
+                        new ResponseFromHttpsGetRequest({
+                          hostname: 'raw.githubusercontent.com',
+                          path: '/Guseyn/page/master/package.json'
+                        })
+                      )
+                    )
+                  ), 'dependencies'
                 )
               )
             )
@@ -206,6 +212,7 @@ switch (command) {
   page run [evironment] | page r [evironment]: runs the project
   page br [evironment]: builds and then runs the project
   page -v | page --version: check a version of the Page framework
+  page -h | page --help: information about commands
 `
     );
     break;
