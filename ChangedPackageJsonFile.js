@@ -5,7 +5,7 @@ const { AsyncObject } = require('@cuties/cutie');
 class ChangedPackageJsonFile extends AsyncObject {
 
   constructor(packageJson, projectDetails, propertiesToDelete) {
-    super(packageJson, projectDetails, propertiesToDelete);
+    super(packageJson, projectDetails, propertiesToDelete || []);
   }
 
   definedSyncCall() {
