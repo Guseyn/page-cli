@@ -191,7 +191,7 @@ switch (command) {
     break;
   }
   case 'test': {
-    new ExecutedTests().call();
+    new ExecutedTests(process).call();
   }
   case '-v':
   case '--version': {
