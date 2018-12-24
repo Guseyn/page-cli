@@ -18,6 +18,7 @@ const PackageJsonFileWithUpdatedDeps = require('./PackageJsonFileWithUpdatedDeps
 const ReadmeContent = require('./ReadmeContent');
 const BuildingProcess = require('./BuildingProcess');
 const RunningProcess = require('./RunningProcess');
+const ExecutedTests = require('./ExecutedTests');
 const LoggedPageVersion = require('./LoggedPageVersion');
 const ConfigWithUpdatedPageVersion = require('./ConfigWithUpdatedPageVersion');
 const AreVersionsEqual = require('./AreVersionsEqual');
@@ -189,6 +190,9 @@ switch (command) {
     ).call();
     break;
   }
+  case 'test': {
+    new ExecutedTests().call();
+  }
   case '-v':
   case '--version': {
     new LoggedPageVersion(
@@ -211,6 +215,7 @@ switch (command) {
   page build [evironment] | page b [evironment]: builds the project
   page run [evironment] | page r [evironment]: runs the project
   page br [evironment]: builds and then runs the project
+  page test: run tests (via npm)
   page -v | page --version: check a version of the Page framework
   page -h | page --help: information about commands
 `

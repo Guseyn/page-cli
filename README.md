@@ -8,6 +8,7 @@ Command line interface for [Page](https://github.com/Guseyn/page) framework.
 * `page build [evironment] | page b [evironment]`: builds the project
 * `page run [evironment] | page r [evironment]`: runs the project
 * `page br [evironment]`: builds and then runs the project
+* `page test`: run tests (via npm)
 * `page -v | page --version`: check a version of the Page framework
 * `page -h | page --help`: information about commands
 
