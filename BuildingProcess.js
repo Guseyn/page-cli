@@ -5,7 +5,7 @@ const buildingProcess = require('./custom-calls/buildingProcess')
 
 // Represented result is process
 class BuildingProcess extends AsyncObject {
-  constructor (process, env, ...otherEnvVars) {
+  constructor (process, env, otherEnvVars) {
     super(process, env || 'local', otherEnvVars || [])
   }
 
