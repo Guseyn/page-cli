@@ -1,21 +1,19 @@
 'use strict'
 
-const { AsyncObject } = require('@cuties/cutie');
+const { AsyncObject } = require('@cuties/cutie')
 
 class WarningLatestVersionMessage extends AsyncObject {
-
-  constructor(version) {
-    super(version);
+  constructor (version) {
+    super(version)
   }
 
-  definedSyncCall() {
+  syncCall () {
     return (version) => {
       let message = `You use latest version of Page (${version})`
-      console.log(message);
-      return message;
+      console.log(message)
+      return message
     }
   }
-
 }
 
-module.exports = WarningLatestVersionMessage;
+module.exports = WarningLatestVersionMessage

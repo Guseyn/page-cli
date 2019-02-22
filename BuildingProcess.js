@@ -1,19 +1,17 @@
 'use strict'
 
-const { AsyncObject } = require('@cuties/cutie');
-const buildingProcess = require('./custom-calls/buildingProcess');
+const { AsyncObject } = require('@cuties/cutie')
+const buildingProcess = require('./custom-calls/buildingProcess')
 
 // Represented result is process
 class BuildingProcess extends AsyncObject {
-
-  constructor(process, env) {
-    super(process, env);
+  constructor (process, env, ...otherEnvVars) {
+    super(process, env || 'local', otherEnvVars || [])
   }
 
-  definedAsyncCall() {
-    return buildingProcess;
+  asyncCall () {
+    return buildingProcess
   }
-
 }
 
-module.exports = BuildingProcess;
+module.exports = BuildingProcess

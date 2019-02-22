@@ -1,26 +1,24 @@
 'use strict'
 
-const { AsyncObject } = require('@cuties/cutie');
+const { AsyncObject } = require('@cuties/cutie')
 
 class ProjectDetails extends AsyncObject {
-
-  constructor(keys, answers) {
-    super(keys, answers);
+  constructor (keys, answers) {
+    super(keys, answers)
   }
 
-  definedSyncCall() {
+  syncCall () {
     return (keys, answers) => {
-      let details = {};
+      let details = {}
       if (keys.length !== answers.length) {
-        throw new Error('keys and answers have different lengths');
+        throw new Error('keys and answers have different lengths')
       }
       keys.forEach((key, index) => {
-        details[key.name] = answers[index] || (key.defaultValue || '');
-      });
-      return details;
+        details[key.name] = answers[index] || (key.defaultValue || '')
+      })
+      return details
     }
   }
-
 }
 
-module.exports = ProjectDetails;
+module.exports = ProjectDetails

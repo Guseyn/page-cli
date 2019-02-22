@@ -1,20 +1,18 @@
 'use strict'
 
-const { AsyncObject } = require('@cuties/cutie');
+const { AsyncObject } = require('@cuties/cutie')
 
 class ConfigWithUpdatedPageVersion extends AsyncObject {
-
-  constructor(config, version) {
-    super(config, version);
+  constructor (config, version) {
+    super(config, version)
   }
 
-  definedSyncCall() {
+  syncCall () {
     return (config, version) => {
-      config.page.version = version;
-      return config;
+      config.page.version = version
+      return config
     }
   }
-
 }
 
-module.exports = ConfigWithUpdatedPageVersion;
+module.exports = ConfigWithUpdatedPageVersion

@@ -2,30 +2,29 @@
 
 'use strict'
 
-const { as, AsyncObject } = require('@cuties/cutie');
-const { If, Else } = require('@cuties/if-else');
-const { CreatedInterface, AnswersOfQuestionedInterface, ClosedInterface } = require('@cuties/readline');
-const { ExitedProcess } = require('@cuties/process');
-const { Value, ParsedJSON, PrettyStringifiedJSON } = require('@cuties/json');
-const { DeletedDirectoryRecursively, CopiedDirectoryRecursively, ReadDataByPath, WrittenFile } = require('@cuties/fs');
-const { JoinedPaths } = require('@cuties/path');
-const { ResponseFromHttpsGetRequest, ResponseBody } = require('@cuties/https');
-const { StringFromBuffer } = require('@cuties/buffer');
-const ProjectDetails = require('./ProjectDetails');
-const ClonedRepo = require('./ClonedRepo');
-const ChangedPackageJsonFile = require('./ChangedPackageJsonFile');
-const PackageJsonFileWithUpdatedDeps = require('./PackageJsonFileWithUpdatedDeps');
-const ReadmeContent = require('./ReadmeContent');
-const BuildingProcess = require('./BuildingProcess');
-const RunningProcess = require('./RunningProcess');
-const ExecutedTests = require('./ExecutedTests');
-const LoggedPageVersion = require('./LoggedPageVersion');
-const ConfigWithUpdatedPageVersion = require('./ConfigWithUpdatedPageVersion');
-const AreVersionsEqual = require('./AreVersionsEqual');
-const UpdatedSuccessfullyMessage = require('./UpdatedSuccessfullyMessage');
+const { as } = require('@cuties/cutie')
+const { If, Else } = require('@cuties/if-else')
+const { CreatedInterface, AnswersOfQuestionedInterface, ClosedInterface } = require('@cuties/readline')
+const { ExitedProcess } = require('@cuties/process')
+const { Value, ParsedJSON, PrettyStringifiedJSON } = require('@cuties/json')
+const { DeletedDirectoryRecursively, ReadDataByPath, WrittenFile } = require('@cuties/fs')
+const { JoinedPaths } = require('@cuties/path')
+const { ResponseFromHttpsGetRequest, ResponseBody } = require('@cuties/https')
+const { StringFromBuffer } = require('@cuties/buffer')
+const ProjectDetails = require('./ProjectDetails')
+const ClonedRepo = require('./ClonedRepo')
+const ChangedPackageJsonFile = require('./ChangedPackageJsonFile')
+const PackageJsonFileWithUpdatedDeps = require('./PackageJsonFileWithUpdatedDeps')
+const ReadmeContent = require('./ReadmeContent')
+const BuildingProcess = require('./BuildingProcess')
+const RunningProcess = require('./RunningProcess')
+const ExecutedTests = require('./ExecutedTests')
+const LoggedPageVersion = require('./LoggedPageVersion')
+const ConfigWithUpdatedPageVersion = require('./ConfigWithUpdatedPageVersion')
+const AreVersionsEqual = require('./AreVersionsEqual')
 const WarningWithLatestVersionMessage = require('./WarningWithLatestVersionMessage')
 
-let command = process.argv[2];
+let command = process.argv[2]
 switch (command) {
   case 'create': {
     new CreatedInterface({
@@ -33,9 +32,9 @@ switch (command) {
       output: process.stdout
     }).as('interface').after(
       new ProjectDetails(
-        [{name: 'name'}, {name: 'version', defaultValue: '1.0.0'},
-         {name: 'author'}, {name: 'description'}, 
-         {name: 'license', defaultValue: 'MIT'}],
+        [{ name: 'name' }, { name: 'version', defaultValue: '1.0.0' },
+          { name: 'author' }, { name: 'description' },
+          { name: 'license', defaultValue: 'MIT' }],
         new AnswersOfQuestionedInterface(
           as('interface'), 'License: (MIT) ',
           new AnswersOfQuestionedInterface(
@@ -73,10 +72,10 @@ switch (command) {
                     new ChangedPackageJsonFile(
                       new ParsedJSON(
                         new ReadDataByPath(
-                          as('packageJsonPath'), {encoding: 'utf8'}
+                          as('packageJsonPath'), { encoding: 'utf8' }
                         )
-                      ), 
-                      as('projectDetails'), 
+                      ),
+                      as('projectDetails'),
                       ['repository', 'bugs', 'homepage']
                     )
                   )
@@ -99,8 +98,8 @@ switch (command) {
           )
         )
       )
-    ).call();
-    break;
+    ).call()
+    break
   }
   case 'update': {
     new If(
@@ -126,7 +125,7 @@ switch (command) {
           ).as('localConfig'),
           'page.version'
         )
-      ), 
+      ),
       new WarningWithLatestVersionMessage(
         new Value(as('localConfig'), 'page.version')
       ),
@@ -148,7 +147,7 @@ switch (command) {
               new PackageJsonFileWithUpdatedDeps(
                 new ParsedJSON(
                   new ReadDataByPath(
-                    'package.json', {encoding: 'utf8'}
+                    'package.json', { encoding: 'utf8' }
                   )
                 ),
                 new Value(
@@ -168,30 +167,34 @@ switch (command) {
           )
         )
       )
-    ).call();
-    break;
+    ).call()
+    break
   }
   case 'build':
   case 'b': {
-    let env = process.argv[3] || 'local';
-    new BuildingProcess(process, env).call();
-    break;
+    new BuildingProcess(
+      process, process.argv[3], process.argv.slice(4)
+    ).call()
+    break
   }
   case 'run':
   case 'r': {
-    let env = process.argv[3] || 'local';
-    new RunningProcess(process, env).call();
-    break;
+    new RunningProcess(
+      process, process.argv[3], process.argv.slice(4)
+    ).call()
+    break
   }
   case 'br': {
-    let env = process.argv[3] || 'local';
     new RunningProcess(
-      new BuildingProcess(process, env), env
-    ).call();
-    break;
+      new BuildingProcess(
+        process, process.argv[3], process.argv.slice(4)
+      ), process.argv[3], process.argv.slice(4)
+    ).call()
+    break
   }
   case 'test': {
-    new ExecutedTests(process).call();
+    new ExecutedTests(process).call()
+    break
   }
   case '-v':
   case '--version': {
@@ -203,13 +206,13 @@ switch (command) {
           )
         ), 'page.version'
       )
-    ).call();
-    break;
+    ).call()
+    break
   }
   case '-h':
   case '--help': {
     console.log(
-`commands:
+      `commands:
   page create: creates a new project
   page update: upgrades the project to a new version of Page framework
   page build [evironment] | page b [evironment]: builds the project
@@ -219,11 +222,11 @@ switch (command) {
   page -v | page --version: check a version of the Page framework
   page -h | page --help: information about commands
 `
-    );
-    break;
+    )
+    break
   }
   default:
     throw new Error(`
       no such command like ${command}, use page --help | page -h for more info
-    `);
+    `)
 }

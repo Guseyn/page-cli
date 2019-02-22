@@ -1,19 +1,17 @@
 'use strict'
 
-const { AsyncObject } = require('@cuties/cutie');
-const clonedRepo = require('./custom-calls/clonedRepo');
+const { AsyncObject } = require('@cuties/cutie')
+const clonedRepo = require('./custom-calls/clonedRepo')
 
 // Represented result is name
 class ClonedRepo extends AsyncObject {
-
-  constructor(url, name) {
-    super(url, name);
+  constructor (url, name) {
+    super(url, name)
   }
 
-  definedAsyncCall() {
-    return clonedRepo;
+  asyncCall () {
+    return clonedRepo
   }
-
 }
 
-module.exports = ClonedRepo;
+module.exports = ClonedRepo
