@@ -5,8 +5,8 @@ const runningProcess = require('./custom-calls/runningProcess')
 
 // Represented result is process
 class RunningProcess extends AsyncObject {
-  constructor (process, env) {
-    super(process, env)
+  constructor (process, env, otherEnvVars) {
+    super(process, env || 'local' || otherEnvVars || [])
   }
 
   asyncCall () {
