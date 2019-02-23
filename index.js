@@ -90,7 +90,7 @@ switch (command) {
                       new Value(as('projectDetails'), 'description')
                     )
                   ).after(
-                    new UnlinkedFile('./.travis.yml').after(
+                    new UnlinkedFile('.travis.yml').after(
                       new ExitedProcess(process, 0)
                     )
                   )
