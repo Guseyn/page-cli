@@ -98,7 +98,14 @@ switch (command) {
                         '.travis.yml'
                       )
                     ).after(
-                      new ExitedProcess(process, 0)
+                      new UnlinkedFile(
+                        new JoinedPaths(
+                          new Value(as('projectDetails'), 'name'),
+                          'LICENSE'
+                        )
+                      ).after(
+                        new ExitedProcess(process, 0)
+                      )
                     )
                   )
                 )

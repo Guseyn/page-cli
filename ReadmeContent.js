@@ -9,7 +9,7 @@ class ReadmeContent extends AsyncObject {
 
   syncCall () {
     return (name, description) => {
-      return `#${name}\r\n${description}\r\n`
+      return `# ${name}\r\n${description}\r\n`
     }
   }
 }
