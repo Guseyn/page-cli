@@ -3,7 +3,6 @@
 const spawn = require('child_process').spawn
 
 module.exports = (process, env, otherEnvVars, callback) => {
-  console.log(process, env, otherEnvVars, callback)
   const npm = spawn('npm', ['run', `run-${env}`].concat(otherEnvVars), {
     stdio: [process.stdin, process.stdout, process.stderr]
   })
